@@ -1,11 +1,11 @@
 ﻿using ApiEmail.Core.Dtos;
 using ApiEmail.Core.Interfaces;
+using MailKit.Net.Smtp;
 using Microsoft.AspNetCore.Http;
 using MimeKit;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.Mail;
 using System.Text;
 using System.Threading.Tasks;
 

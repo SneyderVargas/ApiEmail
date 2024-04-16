@@ -1,7 +1,10 @@
 ﻿using ApiEmail.Core.Dtos;
 using ApiEmail.Core.Interfaces;
+using ApiEmail.Helpers;
 using MailKit.Net.Smtp;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Options;
+using Microsoft.VisualBasic.FileIO;
 using MimeKit;
 using System;
 using System.Collections.Generic;
@@ -13,6 +16,13 @@ namespace ApiEmail.Infra.Repositories
 {
     public class SendEmailRepo : ISendEmail
     {
+        private readonly EmailConfiguration _emailConfiguration;
+
+        public SendEmailRepo(IOptions<EmailConfiguration> emailConfiguration)
+        {
+            _emailConfiguration = emailConfiguration.Value;
+        }
+
         public async Task SendAsync(EmailMessageDto Message, bool isHtml, IFormFile file, string StringUbiFile)
         {            
             try
@@ -52,9 +62,9 @@ namespace ApiEmail.Infra.Repositories
                         emailClient.Connect(_emailConfiguration.SmtpServer, _emailConfiguration.SmtpPort, false);
                         //Remove any OAuth functionality as we won't be using it. 
                         emailClient.AuthenticationMechanisms.Remove("XOAUTH2");
-                        emailClient.Authenticate(_emailConfiguration.SmtpUsername, _emailConfiguration.SmtpPassword);
-                        await emailClient.SendAsync(message, ct);
-                        await emailClient.DisconnectAsync(true, ct);
+                        emailClient.Authenticate(_emailConfiguration.SmtpUser, _emailConfiguration.SmtpPassword);
+                        await emailClient.SendAsync(message);
+                        await emailClient.DisconnectAsync(true);
 
                     }
                     catch (Exception e)

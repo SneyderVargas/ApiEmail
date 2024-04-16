@@ -18,4 +18,8 @@
     <Folder Include="Resx\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\ApiEmail.Core\ApiEmail.Core.csproj" />
+  </ItemGroup>
+
 </Project>
